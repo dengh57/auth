@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package authorization;
+option go_package = "codeup.aliyun.com/go-online/public/permission-service/authorization";
+
+message Empty {
+}
+
+message Data {
+    repeated string data = 1;
+}
+
+//message Filter {
+//    repeated string p_type = 1;
+//    repeated string v0 = 2;
+//    repeated string v1 = 3;
+//    repeated string v2 = 4;
+//    repeated string v3 = 5;
+//    repeated string v4 = 6;
+//    repeated string v5 = 7;
+//    repeated string v6 = 8;
+//    repeated string v7 = 9;
+//    repeated string v8 = 10;
+//    repeated string v9 = 11;
+//}
+
+message AddModelReq {
+    string request_definition = 1;
+    string policy_definition = 2;
+    string role_definition = 3;
+    string policy_effect = 4;
+    string matchers = 5;
+}
+
+message AddModelRes {
+    int64 model_id = 1;
+}
+
+message AddPolicyRes {
+    repeated int64 policy_id = 1;
+}
+
+message AddPolicyReq {
+    int64 model_id = 1;
+    repeated Data policies = 2;
+}
+
+message DeletePolicyReq {
+    int64 model_id = 1;
+    repeated int64 policy_id = 2;
+}
+
+message AuthReq {
+    int64 model_id = 1;
+    repeated Data request = 2;
+    map<string, Data> filter = 3;
+}
+
+message AuthRes {
+    repeated bool result = 1;
+}
+
+service Authorization {
+    rpc AddModel(AddModelReq) returns(AddModelRes);
+
+    rpc AddPolicy(AddPolicyReq) returns(AddPolicyRes);
+
+    rpc DeletePolicy(DeletePolicyReq) returns(Empty);
+
+    rpc Authorization(AuthReq) returns(AuthRes);
+}
